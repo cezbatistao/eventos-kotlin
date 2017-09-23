@@ -17,7 +17,6 @@ import org.junit.Test
 import org.mockito.Matchers.anyString
 import org.powermock.api.mockito.PowerMockito.`when`
 import org.powermock.api.mockito.PowerMockito.mock
-import org.powermock.core.classloader.annotations.PrepareForTest
 import org.springframework.core.env.Environment
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.tools4j.spockito.Spockito
@@ -27,7 +26,6 @@ import java.time.LocalDate
 /**
  * Created by ceb on 02/07/17.
  */
-@PrepareForTest(LoginServiceImpl::class)
 class PessoaFisicaServiceImplUnitTests : UnitTest() {
 
     private lateinit var pessoaFisicaService: PessoaFisicaServiceImpl
@@ -52,7 +50,7 @@ class PessoaFisicaServiceImplUnitTests : UnitTest() {
     }
 
     @Test
-    @Spockito.Name(" com mensagem experada: {7}")
+    @Spockito.Name("[{row}]: com mensagem experada: {7}")
     @Spockito.Unroll(
         "| Nome     | Email               | Data Nascimento  | Celular          | CPF             | RG            | Tipo Pessoa Fisica  | Mensagem Experada       | ",
         "|          | carlos@carlos.com.br  | 1982-10-10       | (19) 99999-7777  | 350.518.412-87  | 33.333.333.3  | ESTUDANTE           | Nome é obrigatório.     | ",
@@ -144,7 +142,7 @@ class PessoaFisicaServiceImplUnitTests : UnitTest() {
     }
 
     @Test
-    @Spockito.Name(" com mensagem experada: {6}")
+    @Spockito.Name("[{row}]: com mensagem experada: {6}")
     @Spockito.Unroll(
             "| Logradouro    | Numero  | CEP         | Bairro          | Estado  | Cidade    | Mensagem Experada          | ",
             "|               | 45712M  | 12.345-678  | Nome do Bairro  | SP      | Campinas  | Logradouro é obrigatório.  | ",
