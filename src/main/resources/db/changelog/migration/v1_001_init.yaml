@@ -1,0 +1,132 @@
+databaseChangeLog:
+
+    - changeSet:
+        id: 1
+        author: cezbatistao
+        changes:
+            - createTable:
+                tableName: login
+                columns:
+                    - column:
+                        name: id
+                        type: int
+                        autoIncrement: true
+                        constraints:
+                            primaryKey: true
+                            nullable: false
+                    - column:
+                        name: login
+                        type: varchar2(50)
+                        constraints:
+                            nullable: false
+                    - column:
+                        name: senha
+                        type: varchar2(70)
+                        constraints:
+                            nullable: false
+                    - column:
+                        name: ativo
+                        type: boolean
+                        constraints:
+                            nullable: false
+                    - column:
+                        name: cadastro_confirmado
+                        type: boolean
+                        constraints:
+                            nullable: false
+            - createTable:
+                tableName: pessoa_fisica
+                columns:
+                    - column:
+                        name: id
+                        type: int
+                        autoIncrement: true
+                        constraints:
+                            primaryKey: true
+                            nullable: false
+                    - column:
+                        name: nome
+                        type: varchar2(100)
+                        constraints:
+                            nullable: false
+                    - column:
+                        name: email
+                        type: varchar2(100)
+                        constraints:
+                            nullable: false
+                    - column:
+                        name: celular
+                        type: varchar2(15)
+                        constraints:
+                            nullable: false
+                    - column:
+                        name: telefone
+                        type: varchar2(14)
+                        constraints:
+                            nullable: true
+                    - column:
+                        name: data_nascimento
+                        type: date
+                        constraints:
+                            nullable: false
+                    - column:
+                        name: cpf
+                        type: varchar2(14)
+                        constraints:
+                            nullable: false
+                    - column:
+                        name: rg
+                        type: varchar2(20)
+                    - column:
+                        name: tipo_pessoa
+                        type: varchar2(15)
+                        constraints:
+                            nullable: false
+                    - column:
+                        name: endereco_logradouro
+                        type: varchar2(100)
+                        constraints:
+                            nullable: false
+                    - column:
+                        name: endereco_numero
+                        type: varchar2(10)
+                        constraints:
+                            nullable: false
+                    - column:
+                        name: endereco_complemento
+                        type: varchar2(100)
+                        constraints:
+                            nullable: true
+                    - column:
+                        name: endereco_cep
+                        type: varchar2(10)
+                        constraints:
+                            nullable: false
+                    - column:
+                        name: endereco_bairro
+                        type: varchar2(80)
+                        constraints:
+                            nullable: false
+                    - column:
+                        name: endereco_estado
+                        type: char(2)
+                        constraints:
+                            nullable: false
+                    - column:
+                        name: endereco_cidade
+                        type: varchar2(100)
+                        constraints:
+                            nullable: false
+                    - column:
+                        name: login_id
+                        type: int
+                        constraints:
+                            nullable: false
+                    - addForeignKeyConstraint:
+                        baseColumnNames: login_id
+                        baseTableName: login
+                        constraintName: fk_login
+                        onDelete: CASCADE
+                        onUpdate: NO ACTION
+                        referencedColumnNames: id
+                        referencedTableName: login

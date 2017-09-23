@@ -1,0 +1,136 @@
+buildscript {
+	ext {
+		kotlinVersion = '1.1.2'
+		springBootVersion = '1.5.3.RELEASE'
+	}
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		jcenter()
+	}
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion" // Required for Kotlin integration
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
+	}
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	jcenter()
+}
+
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+apply plugin: 'kotlin'
+apply plugin: 'java'
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'kotlin-spring'
+
+apply plugin: 'war'
+apply plugin: 'io.spring.dependency-management'
+
+apply plugin: 'jacoco'
+
+group = 'br.com.aab.supercartola'
+version = '0.0.1-SNAPSHOT'
+
+springBoot {
+	executable = true
+}
+
+war {
+	baseName = 'ROOT'
+	version =  ''
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileKotlin {
+	kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+	kotlinOptions.jvmTarget = "1.8"
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+configurations {
+	provided
+	compile.exclude module: "spring-boot-starter-tomcat"
+}
+
+sourceSets {
+	main.compileClasspath += configurations.provided
+	test.compileClasspath += configurations.provided
+	test.runtimeClasspath += configurations.provided
+}
+
+jacocoTestReport {
+	group = "Reporting"
+	reports {
+		xml.enabled true
+		csv.enabled false
+		html.destination new File("${buildDir}/reports/coverage")
+	}
+	afterEvaluate {
+		classDirectories = files(classDirectories.files.collect {
+			fileTree(dir: it,
+					exclude: [
+							"**/domain/**",
+							"**/service/exception/**",
+							"**/infrastructure/exception/**",
+							"**/notificacao/to/**"
+					]
+			)
+		})
+	}
+}
+
+dependencies {
+	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+	compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+
+	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile('org.springframework.boot:spring-boot-starter-security')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-undertow')
+	compile('org.springframework.boot:spring-boot-starter-jdbc') {
+		exclude group: 'org.apache.tomcat', module: 'tomcat-jdbc'
+	}
+	compile('com.zaxxer:HikariCP')
+	compile 'mysql:mysql-connector-java:5.1.40'
+	compile "org.liquibase:liquibase-core"
+	compile "org.yaml:snakeyaml"
+
+	compile group: 'com.google.guava', name: 'guava', version: '21.0'
+	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
+	compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.3'
+	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
+	compile group: 'org.modelmapper', name: 'modelmapper', version: '0.7.8'
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+	compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
+	compile group: 'br.com.caelum.stella', name: 'caelum-stella-core', version: '2.1.2'
+	compile group: 'com.mitchellbosecke', name: 'pebble', version: '2.4.0'
+
+	runtime('org.springframework.boot:spring-boot-devtools')
+
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile group: 'com.h2database', name: 'h2', version: '1.4.196'
+	testCompile group: 'com.nhaarman', name: 'mockito-kotlin', version: '1.5.0'
+	testCompile 'org.powermock:powermock-api-mockito:1.6.4'
+	testCompile 'org.powermock:powermock-module-junit4:1.6.4'
+//	testCompile group: 'com.nhaarman', name: 'mockito-kotlin', version: '1.5.0' {
+//		exclude group: 'org.mockito', module: 'mockito-core'
+//	}
+	testCompile group: 'org.tools4j', name: 'tools4j-spockito', version: '1.6'
+
+	testCompile 'com.natpryce:hamkrest:1.1.0.0'
+}
