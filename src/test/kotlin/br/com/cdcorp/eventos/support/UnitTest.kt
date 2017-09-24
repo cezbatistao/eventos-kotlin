@@ -12,7 +12,4 @@ import org.tools4j.spockito.Spockito
 @PowerMockRunnerDelegate(value = Spockito::class)
 abstract class UnitTest {
 
-//    @Rule
-//    var rule = PowerMockRule()
-
 }

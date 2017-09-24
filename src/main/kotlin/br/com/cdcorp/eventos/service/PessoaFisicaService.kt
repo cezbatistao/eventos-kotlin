@@ -10,5 +10,6 @@ interface PessoaFisicaService {
     fun salvar(pessoaFisica: PessoaFisica) : PessoaFisica
     fun atualizar(pessoaFisica: PessoaFisica) : PessoaFisica
     fun findByCpf(cpf: String) : PessoaFisica?
+    fun listar(): List<PessoaFisica>
 
 }

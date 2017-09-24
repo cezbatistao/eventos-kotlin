@@ -28,8 +28,7 @@ class PessoaFisicaRepositoryMysql : PessoaFisicaRepository {
         this.loginRepository = loginRepository
     }
 
-
-    override fun salvar(pessoaFisica: PessoaFisica): PessoaFisica {
+    override fun create(pessoaFisica: PessoaFisica): PessoaFisica {
         val sql = "INSERT INTO pessoa_fisica(nome, email, celular, telefone, data_nascimento, cpf, rg, tipo_pessoa, endereco_logradouro, " +
                 "endereco_numero, endereco_complemento, endereco_cep, endereco_bairro, endereco_estado, endereco_cidade, " +
                 "login_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -44,13 +43,17 @@ class PessoaFisicaRepositoryMysql : PessoaFisicaRepository {
             stmt.setString(6, pessoaFisica.cpf)
             stmt.setString(7, pessoaFisica.rg)
             stmt.setString(8, pessoaFisica.tipoPessoaFisica.name)
-            stmt.setString(9, pessoaFisica.endereco!!.logradouro)
-            stmt.setString(10, pessoaFisica.endereco!!.numero)
-            stmt.setString(11, pessoaFisica.endereco!!.complemento)
-            stmt.setString(12, pessoaFisica.endereco!!.cep)
-            stmt.setString(13, pessoaFisica.endereco!!.bairro)
-            stmt.setString(14, pessoaFisica.endereco!!.estado)
-            stmt.setString(15, pessoaFisica.endereco!!.cidade)
+
+            val endereco = pessoaFisica.endereco!!
+
+            stmt.setString(9, endereco.logradouro)
+            stmt.setString(10, endereco.numero)
+            stmt.setString(11, endereco.complemento)
+            stmt.setString(12, endereco.cep)
+            stmt.setString(13, endereco.bairro)
+            stmt.setString(14, endereco.estado)
+            stmt.setString(15, endereco.cidade)
+
             stmt.setLong(16, pessoaFisica.login?.id!!)
         })
 
@@ -63,13 +66,6 @@ class PessoaFisicaRepositoryMysql : PessoaFisicaRepository {
                 "endereco_complemento, endereco_cep, endereco_bairro, endereco_estado, endereco_cidade, login_id FROM pessoa_fisica where cpf = ?"
         val pessoasFisicas: List<PessoaFisica> = jdbcTemplate.query(sql, arrayOf(cpf), PessoaFisicaRowMapper(this.loginRepository))
 
-//        { rs, rowNum ->
-//            val dataNascimento: LocalDate = rs.getDate("data_nascimento").toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-//            val tipoPessoaFisica = TipoPessoaFisica.valueOf(rs.getString("tipo_pessoa"))
-//            PessoaFisica(rs.getString("nome"), rs.getString("email"), rs.getString("celular"), dataNascimento, rs.getString("cpf"),
-//                    tipoPessoaFisica)
-//        }
-//        return Unit
         return if (pessoasFisicas.isNotEmpty()) pessoasFisicas[0] else null
     }
 
@@ -81,7 +77,7 @@ class PessoaFisicaRepositoryMysql : PessoaFisicaRepository {
         return if (pessoasFisicas.isNotEmpty()) pessoasFisicas[0] else null
     }
 
-    override fun atualizar(pessoaFisica: PessoaFisica): PessoaFisica {
+    override fun update(pessoaFisica: PessoaFisica): PessoaFisica {
         val sql = "UPDATE pessoa_fisica set nome = ?, email = ?, celular = ?, telefone = ?, rg = ?, tipo_pessoa = ?, endereco_logradouro = ?, " +
                 "endereco_numero = ?, endereco_complemento = ?, endereco_cep = ?, endereco_bairro = ?, endereco_estado = ?, " +
                 "endereco_cidade = ? WHERE id = ?"
@@ -92,17 +88,28 @@ class PessoaFisicaRepositoryMysql : PessoaFisicaRepository {
             stmt.setString(4, pessoaFisica.telefone)
             stmt.setString(5, pessoaFisica.rg)
             stmt.setString(6, pessoaFisica.tipoPessoaFisica.name)
-            stmt.setString(7, pessoaFisica.endereco!!.logradouro)
-            stmt.setString(8, pessoaFisica.endereco!!.numero)
-            stmt.setString(9, pessoaFisica.endereco!!.complemento)
-            stmt.setString(10, pessoaFisica.endereco!!.cep)
-            stmt.setString(11, pessoaFisica.endereco!!.bairro)
-            stmt.setString(12, pessoaFisica.endereco!!.estado)
-            stmt.setString(13, pessoaFisica.endereco!!.cidade)
+
+            val endereco = pessoaFisica.endereco!!
+
+            stmt.setString(7, endereco.logradouro)
+            stmt.setString(8, endereco.numero)
+            stmt.setString(9, endereco.complemento)
+            stmt.setString(10, endereco.cep)
+            stmt.setString(11, endereco.bairro)
+            stmt.setString(12, endereco.estado)
+            stmt.setString(13, endereco.cidade)
+
             stmt.setLong(14, pessoaFisica.id!!)
         })
 
         return pessoaFisica
+    }
+
+    override fun list(): List<PessoaFisica> {
+        val sql = "SELECT id, nome, email, celular, telefone, data_nascimento, cpf, rg, tipo_pessoa, endereco_logradouro, endereco_numero, " +
+                "endereco_complemento, endereco_cep, endereco_bairro, endereco_estado, endereco_cidade, login_id FROM pessoa_fisica"
+
+        return jdbcTemplate.query(sql, PessoaFisicaRowMapper(this.loginRepository))
     }
 
     class PessoaFisicaRowMapper(private var loginRepository: LoginRepository) : RowMapper<PessoaFisica> {

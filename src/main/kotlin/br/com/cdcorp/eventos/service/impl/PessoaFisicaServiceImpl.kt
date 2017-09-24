@@ -47,7 +47,7 @@ class PessoaFisicaServiceImpl : PessoaFisicaService {
         val login = loginService.criarLoginUsuario(pessoaFisica.email)
         pessoaFisica.login = login
 
-        return pessoaFisicaRepository.salvar(pessoaFisica)
+        return pessoaFisicaRepository.create(pessoaFisica)
     }
 
     override fun atualizar(pessoaFisica: PessoaFisica) : PessoaFisica {
@@ -75,11 +75,15 @@ class PessoaFisicaServiceImpl : PessoaFisicaService {
         pessoaFisicaSalva.tipoPessoaFisica = pessoaFisica.tipoPessoaFisica
         pessoaFisicaSalva.rg = pessoaFisica.rg
 
-        return pessoaFisicaRepository.atualizar(pessoaFisicaSalva)
+        return pessoaFisicaRepository.update(pessoaFisicaSalva)
     }
 
     override fun findByCpf(cpf: String): PessoaFisica? {
         return pessoaFisicaRepository.findByCpf(cpf)
+    }
+
+    override fun listar(): List<PessoaFisica> {
+        return pessoaFisicaRepository.list()
     }
 
     private fun validarPessoaFisica(notificacao: Notificacao, pessoaFisica: PessoaFisica) {

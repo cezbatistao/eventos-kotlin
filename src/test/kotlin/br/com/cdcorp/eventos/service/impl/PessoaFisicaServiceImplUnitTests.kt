@@ -52,10 +52,10 @@ class PessoaFisicaServiceImplUnitTests : UnitTest() {
     @Test
     @Spockito.Name("[{row}]: com mensagem experada: {7}")
     @Spockito.Unroll(
-        "| Nome     | Email               | Data Nascimento  | Celular          | CPF             | RG            | Tipo Pessoa Fisica  | Mensagem Experada       | ",
+        "| Nome     | Email                 | Data Nascimento  | Celular          | CPF             | RG            | Tipo Pessoa Fisica  | Mensagem Experada       | ",
         "|          | carlos@carlos.com.br  | 1982-10-10       | (19) 99999-7777  | 350.518.412-87  | 33.333.333.3  | ESTUDANTE           | Nome é obrigatório.     | ",
-        "| Carlos   |                     | 1982-10-10       | (19) 99999-7777  | 350.518.412-87  | 33.333.333.3  | ESTUDANTE           | E-mail é obrigatório.   | ",
-        "| Carlos   | lfdshalefsrfse323   | 1982-10-10       | (19) 99999-7777  | 350.518.412-87  | 33.333.333.3  | ESTUDANTE           | E-mail inválido.        | ",
+        "| Carlos   |                       | 1982-10-10       | (19) 99999-7777  | 350.518.412-87  | 33.333.333.3  | ESTUDANTE           | E-mail é obrigatório.   | ",
+        "| Carlos   | lfdshalefsrfse323     | 1982-10-10       | (19) 99999-7777  | 350.518.412-87  | 33.333.333.3  | ESTUDANTE           | E-mail inválido.        | ",
         "| Carlos   | carlos@carlos.com.br  | 1982-10-10       |                  | 350.518.412-87  | 33.333.333.3  | ESTUDANTE           | Celular é obrigatório.  | ",
         "| Carlos   | carlos@carlos.com.br  | 1982-10-10       | (19) 343243243   | 350.518.412-87  | 33.333.333.3  | ESTUDANTE           | Celular inválido.       | ",
         "| Carlos   | carlos@carlos.com.br  | 2015-10-10       | (19) 99999-7777  | 350.518.412-87  | 33.333.333.3  | ESTUDANTE           | Idade mínima para participar é de 18 anos.       | ",
@@ -133,7 +133,7 @@ class PessoaFisicaServiceImplUnitTests : UnitTest() {
         pessoaFisicaService.salvar(pessoaFisica)
 
         val captor = argumentCaptor<PessoaFisica>()
-        verify(pessoaFisicaRepository).salvar(captor.capture())
+        verify(pessoaFisicaRepository).create(captor.capture())
 
         val pessoaFisicaActual = captor.firstValue
         assertThat(pessoaFisicaActual).isNotNull()
@@ -268,7 +268,7 @@ class PessoaFisicaServiceImplUnitTests : UnitTest() {
         pessoaFisicaService.atualizar(pessoaFisicaParaAtualizar)
 
         val captor = argumentCaptor<PessoaFisica>()
-        verify(pessoaFisicaRepository).atualizar(captor.capture())
+        verify(pessoaFisicaRepository).update(captor.capture())
 
         val pessoaFisicaActual = captor.firstValue
         assertThat(pessoaFisicaActual.nome).isEqualToIgnoringCase(pessoaFisicaParaAtualizar.nome)

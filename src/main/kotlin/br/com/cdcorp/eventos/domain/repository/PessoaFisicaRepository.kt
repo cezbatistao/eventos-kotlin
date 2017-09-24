@@ -7,9 +7,10 @@ import br.com.cdcorp.eventos.domain.model.PessoaFisica
  */
 interface PessoaFisicaRepository {
 
-    fun salvar(pessoaFisica: PessoaFisica) : PessoaFisica
+    fun create(pessoaFisica: PessoaFisica) : PessoaFisica
     fun findByCpf(cpf: String) : PessoaFisica?
-    fun  get(id: Long) : PessoaFisica?
-    fun atualizar(pessoaFisica: PessoaFisica): PessoaFisica
+    fun get(id: Long) : PessoaFisica?
+    fun update(pessoaFisica: PessoaFisica): PessoaFisica
+    fun list(): List<PessoaFisica>
 
 }

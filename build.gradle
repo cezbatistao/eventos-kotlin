@@ -131,6 +131,8 @@ dependencies {
 //		exclude group: 'org.mockito', module: 'mockito-core'
 //	}
 	testCompile group: 'org.tools4j', name: 'tools4j-spockito', version: '1.6'
+	// https://mvnrepository.com/artifact/com.jayway.restassured/rest-assured
+	testCompile group: 'com.jayway.restassured', name: 'rest-assured', version: '2.9.0'
 
 	testCompile 'com.natpryce:hamkrest:1.1.0.0'
 }
