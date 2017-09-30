@@ -41,6 +41,10 @@ class EventosResponseBuilder() {
         message = init()
     }
 
+    fun errors(init: () -> List<Error>) {
+        errors = init()
+    }
+
     fun data(init: () -> Any) {
         data = init()
     }
@@ -48,16 +52,20 @@ class EventosResponseBuilder() {
     fun build(): EventosResponse {
         val eventosResponse = EventosResponse()
 
-        status?.apply {
+        status.apply {
             eventosResponse.status = status
         }
 
-        code?.apply {
+        code.apply {
             eventosResponse.code = code
         }
 
-        message?.apply {
+        message.apply {
             eventosResponse.message = message
+        }
+
+        errors?.apply {
+            eventosResponse.errors = errors
         }
 
         data?.apply {
@@ -101,11 +109,11 @@ class ErrorBuilder() {
     fun build(): Error {
         val error = Error()
 
-        code?.apply {
+        code.apply {
             error.code = code
         }
 
-        message?.apply {
+        message.apply {
             error.message = message
         }
 

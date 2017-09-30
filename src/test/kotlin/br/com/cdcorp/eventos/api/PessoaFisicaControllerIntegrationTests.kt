@@ -15,6 +15,7 @@ import com.jayway.restassured.RestAssured
 import com.jayway.restassured.http.ContentType
 import com.jayway.restassured.path.json.JsonPath
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.entry
 import org.junit.Before
 
 
@@ -55,7 +56,7 @@ class PessoaFisicaControllerIntegrationTests : IntegrationTest() {
 
         val cpfToUse = "15051841287"
 
-        val nra = `when`()
+        val response = `when`()
                 .get("/eventos/pessoas-fisicas/${cpfToUse}")
                 .then()
                 .contentType(ContentType.JSON)
@@ -63,10 +64,21 @@ class PessoaFisicaControllerIntegrationTests : IntegrationTest() {
                 .extract().response()
 
 
-        val jsonPath = JsonPath.from(nra.asString())
+        val jsonPath = JsonPath.from(response.asString())
 
         Assertions.assertThat(jsonPath.get<Int>("status")).isEqualTo(400)
         Assertions.assertThat(jsonPath.get<String>("code")).isEqualTo("erro_de_validacao")
         Assertions.assertThat(jsonPath.get<String>("message")).isEqualTo("Erro ao validar uma propriedade.")
+
+        val erros = jsonPath.getList<Map<String, String>>("errors")
+
+        Assertions.assertThat(erros.size).isEqualTo(1)
+
+        val error: Map<String, String> = erros.get(0)
+
+        Assertions.assertThat(error).containsKey("code")
+        Assertions.assertThat(error).containsKey("message")
+
+        Assertions.assertThat(error).contains(entry("code", "cpf"), entry("message", "CPF 15051841287 inv\u00E1lido"));
     }
 }

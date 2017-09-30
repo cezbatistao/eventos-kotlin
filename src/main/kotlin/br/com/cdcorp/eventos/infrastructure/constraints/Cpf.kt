@@ -14,7 +14,7 @@ import kotlin.reflect.KClass
 @Target(AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.TYPE, AnnotationTarget.TYPE_PARAMETER)
 @Retention(RUNTIME)
 annotation class Cpf(
-        val message: String = "{com.example.beanvalidationcustomconstraint.DayOfWeek.message}",
+        val message: String = "{br.com.cdcorp.eventos.infrastructure.constraints.Cpf.message}",
         val groups: Array<KClass<*>> = arrayOf(),
         val payload: Array<KClass<out Payload>> = arrayOf(),
         val isFormatted: Boolean = false,
